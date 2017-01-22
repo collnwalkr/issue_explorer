@@ -5,12 +5,12 @@ import { getUserAPI } from './gh-api'
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
-console.log(getUserAPI)
 
 export default new Vuex.Store({
   state: {
-    count: 1,
-    output: ''
+    output: '',
+    progress: 0,
+    error: false
   },
   actions: {
     increaseCount (context) {
@@ -21,22 +21,35 @@ export default new Vuex.Store({
     },
     getUser (context, name) {
       getUserAPI(name).then((results) => {
-        console.log(results.statusText)
+        context.commit('set_progress', 100)
         context.commit('set_user', results)
       }).catch((error) => {
         console.log('uh-oh ' + error)
+        context.commit('set_error', true)
       })
+    },
+    setError (context, val) {
+      context.commit('set_error', val)
+    },
+    setProgress (context, percentage) {
+      context.commit('set_progress', percentage)
     }
   },
   mutations: {
     increment (state) {
-      state.count++
+      state.progress += 10
     },
     decrease (state) {
-      state.count--
+      state.progress -= 10
     },
     set_user (state, results) {
       state.output = results
+    },
+    set_error (state, e) {
+      state.error = e
+    },
+    set_progress (state, percentage) {
+      state.progress = percentage
     }
   },
   getters: {
@@ -45,6 +58,12 @@ export default new Vuex.Store({
     },
     getOutput: state => {
       return state.output
+    },
+    getProgress: state => {
+      return state.progress
+    },
+    getError: state => {
+      return state.error
     }
   },
   strict: debug
