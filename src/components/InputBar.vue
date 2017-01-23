@@ -1,6 +1,6 @@
 <template>
   <div class="input-bar">
-    <input v-model="username" placeholder="user name">
+    <input v-model="gh_link" placeholder="github link" type="url">
 
     <div class="loading-bar-parent">
       <loading-bar
@@ -28,6 +28,7 @@ export default{
   data () {
     return {
       username: '',
+      gh_link: '',
       load_direction: 'right'
     }
   },
@@ -40,12 +41,13 @@ export default{
   methods: {
     ...mapActions([
       'getUser',
+      'getURL',
       'setError',
       'setProgress'
     ]),
     submit: _.debounce(
       function () {
-        this.getUser(this.username)
+        this.getURL(this.gh_link)
       },
       500
     ),
@@ -59,6 +61,9 @@ export default{
   watch: {
     username: function (username) {
       if (username) this.submit()
+    },
+    gh_link: function (url) {
+      if (url) this.submit()
     }
   }
 }

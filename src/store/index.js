@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { getUserAPI } from './gh-api'
+import { apiURL } from './gh-api'
 
 Vue.use(Vuex)
-
 const debug = process.env.NODE_ENV !== 'production'
 
 export default new Vuex.Store({
@@ -13,19 +12,24 @@ export default new Vuex.Store({
     error: false
   },
   actions: {
-    increaseCount (context) {
-      context.commit('increment')
-    },
-    decreaseCount (context) {
-      context.commit('decrease')
-    },
-    getUser (context, name) {
-      getUserAPI(name).then((results) => {
+    getURL (context, url) {
+      let { promises, type } = apiURL(url)
+
+      Promise.all(promises).then(() => {
         context.commit('set_progress', 100)
-        context.commit('set_user', results)
       }).catch((error) => {
-        console.log('uh-oh ' + error)
         context.commit('set_error', true)
+        console.log(type)
+        let res = error.resource
+        if (error === 'no match') {
+          console.log('cant parse that thanggg')
+        } else if (error.status === 403) {
+          console.log('OUT OF REQUESTS')
+        } else if (error.status === 404) {
+          console.log('CANT FIND ' + res)
+        } else {
+          console.log('UHHHH')
+        }
       })
     },
     setError (context, val) {
@@ -36,12 +40,6 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    increment (state) {
-      state.progress += 10
-    },
-    decrease (state) {
-      state.progress -= 10
-    },
     set_user (state, results) {
       state.output = results
     },
