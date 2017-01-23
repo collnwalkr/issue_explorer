@@ -11,13 +11,15 @@ export default new Vuex.Store({
     issues: {},
     repos: [],
     progress: 0,
-    error: false
+    error: false,
+    current_view: 'default'
   },
   actions: {
     getURL (context, url) {
       let { promises, type } = apiURL(url)
 
       Promise.all(promises).then((res) => {
+        context.commit('set_error', false)
         let repoResult = res[0].data
         let userResult = type === 'user' ? res[1].data : {}
         let issueResult = type === 'repo' ? res[1].data : []
@@ -27,7 +29,6 @@ export default new Vuex.Store({
         context.commit('set_progress', 100)
       }).catch((error) => {
         context.commit('set_error', true)
-        console.log(type)
         let res = error.resource
         if (error === 'no match') {
           console.log('cant parse that thanggg')
@@ -45,6 +46,9 @@ export default new Vuex.Store({
     },
     setProgress (context, percentage) {
       context.commit('set_progress', percentage)
+    },
+    setView (context, view) {
+      context.commit('set_view', view)
     }
   },
   mutations: {
@@ -62,6 +66,9 @@ export default new Vuex.Store({
     },
     set_progress (state, percentage) {
       state.progress = percentage
+    },
+    set_view (state, view) {
+      state.current_view = view
     }
   },
   getters: {
@@ -82,6 +89,9 @@ export default new Vuex.Store({
     },
     getError: state => {
       return state.error
+    },
+    getView: state => {
+      return state.current_view
     }
   },
   strict: debug

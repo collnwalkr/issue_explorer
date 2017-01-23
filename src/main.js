@@ -8,9 +8,10 @@ Vue.use(VueRouter)
 Vue.use(VTooltip)
 
 const routes = [
-  { path: '/:user/:repo' },
-  { path: '/:user/' }
+  { path: '/:user/:repo', name: 'repo' },
+  { path: '/:user/', name: 'user' }
 ]
+
 const router = new VueRouter({
   routes
 })

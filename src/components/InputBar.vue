@@ -17,8 +17,19 @@
 
 <script>
 import loadingBar from 'vue2-loading-bar'
+import VueRouter from 'vue-router'
+import Parse from 'url-parse'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
+
+const routes = [
+  { path: '/:user/:repo' },
+  { path: '/:user/' }
+]
+
+const router = new VueRouter({
+  routes
+})
 
 export default{
   name: 'input-bar',
@@ -29,6 +40,7 @@ export default{
     return {
       username: '',
       gh_link: '',
+      pathname: '',
       load_direction: 'right',
       ph: 'link to GitHub repo or user'
     }
@@ -48,22 +60,32 @@ export default{
     ]),
     submit: _.debounce(
       function () {
+        this.setError(false)
+        router.push({ path: this.pathname })
         this.getURL(this.gh_link)
       },
       500
     ),
-    load_errorDone: function () {
-    },
+    load_errorDone: function () {},
     load_progressDone: function () {
-      this.setError(false)
       this.setProgress(0)
     }
   },
+  created: function () {
+    let gh = 'https://github.com'
+    let pathname = this.$route.path
+    if (pathname !== '/') { this.gh_link = gh + pathname }
+  },
   watch: {
-    gh_link: function (url) {
-      if (url) this.submit()
+    gh_link: function (rawUrl) {
+      let url = Parse(rawUrl)
+      this.pathname = url.pathname
+      if (rawUrl) this.submit()
     },
     '$route' (to) {
+      if (to.path === '/') {
+        this.gh_link = ''
+      }
       if (!_.isEmpty(to.params)) {
         let gh = 'https://github.com/'
         let { user, repo } = to.params
@@ -74,6 +96,7 @@ export default{
     }
   }
 }
+
 </script>
 
 <style lang="scss">

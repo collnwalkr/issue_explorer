@@ -1,21 +1,25 @@
 <template>
   <div id="app">
     <input-bar/>
-    <app-body></app-body>
+    <app-body/>
+    <side-bar/>
   </div>
 </template>
 
 <script>
-import appBody from './components/AppBody'
 import inputBar from './components/InputBar'
+import appBody from './components/AppBody'
+import sideBar from './components/SideBar'
 
 require('font-awesome/css/font-awesome.css')
+require('babel-polyfill')
 
 export default {
   name: 'app',
   components: {
     appBody,
-    inputBar
+    inputBar,
+    sideBar
   }
 }
 
