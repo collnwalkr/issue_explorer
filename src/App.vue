@@ -1,19 +1,24 @@
 <template>
   <div id="app">
+    <input-bar/>
     <app-body></app-body>
   </div>
 </template>
 
 <script>
 import appBody from './components/AppBody'
+import inputBar from './components/InputBar'
+
 require('font-awesome/css/font-awesome.css')
 
 export default {
   name: 'app',
   components: {
-    appBody
+    appBody,
+    inputBar
   }
 }
+
 </script>
 
 <style lang="scss">

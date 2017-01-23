@@ -3,31 +3,40 @@
     <img :src="user.avatar_url">
     <br/>
     <h2>{{ user.login }}</h2>
-    <a :href="user.html_url" v-tooltip.bottom-center="'Go to GitHub profile'" target="_blank">
-      <i class="fa fa-fw fa-external-link-square"></i>
-    </a>
+    <external-link :html="user.html_url" :message="'Go to GitHub profile'" target="_blank"/>
+
     <br/>
-    <li v-for="(repo, index) in repos" v-if="!repo.fork">
-      <h3>{{ repo.name }}</h3>
-      <a :href="repo.html_url" v-tooltip.bottom-center="'Go to ' + repo.name + ' GitHub repo'" target="_blank">
-        <i class="fa fa-fw fa-external-link-square"></i>
-      </a>
-      <span class="repo-count" v-tooltip.bottom-center="'Number of open issues in ' + repo.name">
+
+    <ul>
+      <li v-for="(repo, index) in repos" v-if="!repo.fork">
+        <router-link :to="repo.name" append>
+          <h3>{{ repo.name }}</h3>
+        </router-link>
+        <external-link :html="repo.html_url" :message="'Go to ' + repo.name + ' GitHub repo'" target="_blank"/>
+        <span class="repo-count" v-tooltip.bottom-center="'Number of open issues in ' + repo.name">
         {{ repo.open_issues }}
       </span>
-      {{ repo.description }}
-    </li>
-    <br/>
-    <span>{{ user }}</span>
+        <p>
+          {{ repo.description }}
+        </p>
+      </li>
+    </ul>
 
+    <br/>
+
+    <span>{{ user }}</span>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import externalLink from './ExternalLink'
 
 export default {
   name: 'user-view',
+  components: {
+    externalLink
+  },
   data () {
     return {
       msg: 'Hello World'
@@ -58,6 +67,12 @@ export default {
   }
 
   .repo-count{
-    background-color: $light-grey;
+    background-color: $off-white;
   }
+
+  ul{
+    list-style-type: none;
+    text-align: left;
+  }
+
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="input-bar">
-    <input v-model="gh_link" placeholder="github link" type="url">
+    <input v-model="gh_link" :placeholder=ph type="url">
 
     <div class="loading-bar-parent">
       <loading-bar
@@ -29,7 +29,8 @@ export default{
     return {
       username: '',
       gh_link: '',
-      load_direction: 'right'
+      load_direction: 'right',
+      ph: 'link to GitHub repo or user'
     }
   },
   computed: {
@@ -59,27 +60,47 @@ export default{
     }
   },
   watch: {
-    username: function (username) {
-      if (username) this.submit()
-    },
     gh_link: function (url) {
       if (url) this.submit()
+    },
+    '$route' (to) {
+      if (!_.isEmpty(to.params)) {
+        let gh = 'https://github.com/'
+        let { user, repo } = to.params
+        let userLink = gh + user
+        let repoLink = gh + user + '/' + repo
+        this.gh_link = repo ? repoLink : userLink
+      }
     }
   }
 }
 </script>
 
 <style lang="scss">
-@import "~vue2-loading-bar/src/css/loading-bar.css";
+  @import "~vue2-loading-bar/src/css/loading-bar.css";
+  @import "../assets/variables";
 
-.loading-bar-parent{
-  width: 500px;
-  height: 4px;
-}
-.LoadingBar--error{
-  background: #ff493e;
-}
-#loading-bar{
-  position: relative;
-}
+  .loading-bar-parent{
+    width: 500px;
+    height: 4px;
+  }
+
+  .LoadingBar--error{
+    background: #ff493e;
+  }
+
+  #loading-bar{
+    position: relative;
+  }
+
+  input{
+    width: 400px;
+    height: 30px;
+    font-size: 1.5rem;
+    padding: 10px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: $light-grey;
+    border-image: initial;
+  }
 </style>

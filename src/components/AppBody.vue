@@ -1,20 +1,16 @@
 <template>
   <div class="app-body">
-    <input-bar/>
-    <br/>
-    <user-view/>
+    <user-view v-if=true />
   </div>
 </template>
 
 <script>
-import inputBar from './InputBar'
 import userView from './UserView'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'app-body',
   components: {
-    inputBar,
     userView
   },
   data () {
