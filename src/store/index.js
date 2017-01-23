@@ -7,7 +7,9 @@ const debug = process.env.NODE_ENV !== 'production'
 
 export default new Vuex.Store({
   state: {
-    output: '',
+    user: {},
+    issues: {},
+    repos: [],
     progress: 0,
     error: false
   },
@@ -15,7 +17,13 @@ export default new Vuex.Store({
     getURL (context, url) {
       let { promises, type } = apiURL(url)
 
-      Promise.all(promises).then(() => {
+      Promise.all(promises).then((res) => {
+        let repoResult = res[0].data
+        let userResult = type === 'user' ? res[1].data : {}
+        let issueResult = type === 'repo' ? res[1].data : []
+        context.commit('set_user', userResult)
+        context.commit('set_repos', repoResult)
+        context.commit('set_issues', issueResult)
         context.commit('set_progress', 100)
       }).catch((error) => {
         context.commit('set_error', true)
@@ -40,8 +48,14 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    set_user (state, results) {
-      state.output = results
+    set_user (state, user) {
+      state.user = user
+    },
+    set_issues (state, issues) {
+      state.issues = issues
+    },
+    set_repos (state, repos) {
+      state.repos = repos
     },
     set_error (state, e) {
       state.error = e
@@ -54,11 +68,17 @@ export default new Vuex.Store({
     currentCount: state => {
       return state.count
     },
-    getOutput: state => {
-      return state.output
-    },
     getProgress: state => {
       return state.progress
+    },
+    getUser: state => {
+      return state.user
+    },
+    getIssues: state => {
+      return state.issues
+    },
+    getRepos: state => {
+      return state.repos
     },
     getError: state => {
       return state.error

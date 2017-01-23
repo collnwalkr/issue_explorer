@@ -2,18 +2,20 @@
   <div class="app-body">
     <input-bar/>
     <br/>
-    <span>{{ output }}</span>
+    <user-view/>
   </div>
 </template>
 
 <script>
 import inputBar from './InputBar'
+import userView from './UserView'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'app-body',
   components: {
-    inputBar
+    inputBar,
+    userView
   },
   data () {
     return {
@@ -22,7 +24,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      output: 'getOutput'
+      repos: 'getRepos',
+      issues: 'getIssues'
     })
   }
 }

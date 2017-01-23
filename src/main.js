@@ -3,6 +3,9 @@
 import Vue from 'vue'
 import App from './App'
 import store from './store'
+import VTooltip from 'v-tooltip'
+
+Vue.use(VTooltip)
 
 /* eslint-disable no-new */
 new Vue({
