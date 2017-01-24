@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-    <input-bar/>
-    <app-body/>
     <side-bar/>
+    <div class="flex-stack">
+      <input-bar/>
+      <app-body/>
+    </div>
   </div>
 </template>
 
@@ -26,14 +28,39 @@ export default {
 </script>
 
 <style lang="scss">
+  @import "./assets/variables";
+
+  html,
+  body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+  }
 
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
+    height: 100%;
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: -moz-box;
+    display: flex;
+
+    -ms-flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    -ms-box-orient: horizontal;
+    box-orient: horizontal;
+  }
+
+  .flex-stack{
+    -ms-flex: 1;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -ms-box-flex: 1;
+    flex: 1;
   }
 
   .tooltip {
@@ -45,7 +72,7 @@ export default {
     z-index: 10000;
 
     .tooltip-content {
-      background: black;
+      background: $dark-grey;
       color: white;
       border-radius: 16px;
       padding: 5px 10px 4px;

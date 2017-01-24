@@ -12,7 +12,8 @@ export default new Vuex.Store({
     repos: [],
     progress: 0,
     error: false,
-    current_view: 'default'
+    current_view: 'default',
+    filter: ''
   },
   actions: {
     getURL (context, url) {
@@ -49,6 +50,9 @@ export default new Vuex.Store({
     },
     setView (context, view) {
       context.commit('set_view', view)
+    },
+    setDateFilter (context, filter) {
+      context.commit('set_filter', filter)
     }
   },
   mutations: {
@@ -69,6 +73,9 @@ export default new Vuex.Store({
     },
     set_view (state, view) {
       state.current_view = view
+    },
+    set_filter (state, filter) {
+      state.filter = filter
     }
   },
   getters: {

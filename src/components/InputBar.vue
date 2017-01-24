@@ -104,7 +104,6 @@ export default{
   @import "../assets/variables";
 
   .loading-bar-parent{
-    width: 500px;
     height: 4px;
   }
 
@@ -116,7 +115,7 @@ export default{
     position: relative;
   }
 
-  input{
+  .input-bar input{
     width: 400px;
     height: 30px;
     font-size: 1.5rem;
