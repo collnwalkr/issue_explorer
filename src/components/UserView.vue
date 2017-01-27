@@ -1,9 +1,9 @@
 <template>
   <div class="user-view">
-    <img :src="user.avatar_url">
+    <img class="user-picture" :src="user.avatar_url">
     <br/>
     <h2>{{ user.login }}</h2>
-    <external-link :html="user.html_url" :message="'Go to GitHub profile'" target="_blank"/>
+    <external-link :html="user.html_url" :message="'Go to ' + user.login + '\'s Github profile'" target="_blank"/>
 
     <br/>
 
@@ -14,17 +14,13 @@
         </router-link>
         <external-link :html="repo.html_url" :message="'Go to ' + repo.name + ' GitHub repo'" target="_blank"/>
         <span class="repo-count" v-tooltip.bottom-center="'Number of open issues in ' + repo.name">
-        {{ repo.open_issues }}
-      </span>
+          {{ repo.open_issues }}
+        </span>
         <p>
           {{ repo.description }}
         </p>
       </li>
     </ul>
-
-    <br/>
-
-    <span>{{ user }}</span>
   </div>
 </template>
 
@@ -53,7 +49,10 @@ export default {
 <style scoped lang="scss">
   @import "../assets/variables.scss";
 
-  img{
+  img.user-picture{
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
   }
 
   h2{
@@ -62,16 +61,22 @@ export default {
   }
 
   h3{
-    display: inline-block;
+    display: inline;
   }
 
   .repo-count{
     background-color: $off-white;
+    padding: 4px;
+    border-radius: 3px;
   }
 
   ul{
     list-style-type: none;
     text-align: left;
+  }
+
+  li{
+    margin-bottom: 3rem;
   }
 
 </style>

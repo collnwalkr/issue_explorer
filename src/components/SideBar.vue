@@ -7,9 +7,9 @@
       v {{ version }}
     </p>
 
-    <li v-for="(radio, index) in radioButtons" class="radio">
-      <input type="radio" :id=index :value="radio.value" v-model="ff">
-      <label :for=index>{{ radio.msg }}</label>
+    <li v-for="(radio, index) in radioButtons" class="radio" :class="{ disabled }">
+      <input type="radio" :id=index :value="radio.value" v-model="filter" :disabled="disabled">
+      <label :for=index>{{ radio.msg }} <span class="count" v-if="!disabled">{{ filterCount[index] }}</span></label>
       <div class="check"><div class="inside"></div></div>
     </li>
   </div>
@@ -26,28 +26,46 @@ export default{
   data () {
     return {
       appName: 'Issue Explorer',
-      version: '0.0.1',
+      version: '0.0.2',
       dd: '',
-      ff: 'all',
+      filter: 'all',
       radioButtons: [
         {
-          msg: '24 hours',
+          msg: 'Last Day',
           value: 'day'
         },
         {
-          msg: 'One week',
+          msg: 'Last Week',
           value: 'week'
         },
         {
           msg: 'All time',
           value: 'all'
-        }]
+        }
+      ]
     }
   },
   computed: {
     ...mapGetters({
-      error: 'getError'
-    })
+      error: 'getError',
+      issues: 'getIssues',
+      view: 'getView'
+    }),
+    lastDay: function () {
+      if (this.issues[0]) return this.issues[0].length
+    },
+    lastWeek: function () {
+      if (this.issues[1]) return this.issues[1].length + this.lastDay
+    },
+    older: function () {
+      if (this.issues[2]) return this.issues[2].length + this.lastWeek
+    },
+    filterCount: function () {
+      return [this.lastDay, this.lastWeek, this.older]
+    },
+    disabled: function () {
+      return this.view !== 'repo'
+    }
   },
   methods: {
     ...mapActions([
@@ -55,14 +73,11 @@ export default{
       'getURL',
       'setError',
       'setDateFilter'
-    ]),
-    submit: function () {
-      console.log('h')
-    }
+    ])
   },
   watch: {
-    ff: function () {
-      this.setDateFilter(this.ff)
+    filter: function () {
+      this.setDateFilter(this.filter)
     }
   }
 }
@@ -85,17 +100,22 @@ export default{
   }
 
   h3{
-    margin-bottom: 0;
+    margin-bottom: 5px;
   }
 
   #version{
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.75rem;
     margin-top: 0;
     color: $light-grey;
   }
 
   .radio{
     display: block;
+  }
+
+  .count{
+    float: right;
   }
 
   ul{
@@ -120,7 +140,7 @@ export default{
     position: relative;
     font-weight: 300;
     font-size: 1em;
-    padding: 9px 31px;
+    padding: 8px 31px;
     margin: 0 auto;
     height: 22px;
     z-index: 9;
@@ -174,6 +194,27 @@ export default{
 
   input[type=radio]:checked ~ label{
     color: $highlight;
+  }
+
+  li.disabled , li.disabled:hover {
+    color: $off-white;
+    label, .check {
+      color: $off-white;
+    }
+    .check {
+      border: 2px solid $off-white;
+    }
+    input[type=radio]:checked{
+      ~ label {
+        color: $mid-grey;
+      }
+      ~ .check {
+        border: 2px solid $mid-grey;
+      }
+      ~ .check::before{
+        background: $mid-grey;
+      }
+    }
   }
 
 </style>

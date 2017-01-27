@@ -24,17 +24,41 @@ const getUser = (username) => {
 }
 
 const getRepo = (username) => {
-  return axios.get(ghURL + 'users/' + username + '/repos').catch((e) => { throw new CustomError('repo', e) })
+  return axios.get(ghURL + 'users/' + username + '/repos?per_page=100').catch((e) => { throw new CustomError('repo', e) })
 }
 
 const getIssues = (repo, username) => {
-  return axios.get(ghURL + 'repos/' + username + '/' + repo + '/issues').catch((e) => { throw new CustomError('issue', e) })
+  return axios.get(ghURL + 'repos/' + username + '/' + repo + '/issues?per_page=100').catch((e) => { throw new CustomError('issue', e) })
+}
+
+const filterIssues = (issues) => {
+  let returnIssues = [ [], [], [] ]
+
+  let yesterday = new Date()
+  yesterday.setDate(yesterday.getDate() - 1)
+
+  let lastWeek = new Date()
+  lastWeek.setDate(lastWeek.getDate() - 7)
+
+  for (let issue of issues) {
+    let d = new Date(issue.created_at)
+    let time = d.getTime()
+    if (time > yesterday.getTime()) {
+      returnIssues[0].push(issue)
+    } else if (time > lastWeek.getTime()) {
+      returnIssues[1].push(issue)
+    } else {
+      returnIssues[2].push(issue)
+    }
+  }
+
+  return returnIssues
 }
 
 const getURL = (rawURL) => {
   let url = Parse(rawURL)
   let match = pattern.match(url.pathname)
-  let returnPromise, returnType
+  let returnPromise, returnType, repoName
   let repoPromise, issuePromise, userPromise
 
   if (url.hostname === hostname && match) {
@@ -46,6 +70,7 @@ const getURL = (rawURL) => {
       issuePromise = getIssues(repo, username)
       returnPromise = [repoPromise, issuePromise]
       returnType = 'repo'
+      repoName = repo
     // ELSE if there is only user -> get user and list of repos
     } else if (username) {
       repoPromise = getRepo(username)
@@ -58,7 +83,7 @@ const getURL = (rawURL) => {
     return { promises: [p] }
   }
 
-  return { promises: returnPromise, type: returnType }
+  return { promises: returnPromise, type: returnType, repoName }
 }
 
-export { getURL as apiURL }
+export { getURL as apiURL, filterIssues }

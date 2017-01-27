@@ -14,7 +14,7 @@ import userView from './UserView'
 import repoView from './RepoView'
 import errorView from './ErrorView'
 import _ from 'lodash'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'app-body',
@@ -34,16 +34,20 @@ export default {
     })
   },
   methods: {
+    ...mapActions({
+      sendView: 'setView'
+    }),
     setView: _.debounce(
       function (path) {
-        let matched = path.matched[0]
-        if (this.error) {
-          this.view = 'error'
-        } else if (matched) {
-          this.view = matched.name
-        }
-        if (!matched) {
-          this.view = 'default'
+        if (path.matched) {
+          if (this.error) {
+            this.view = 'error'
+          } else if (path.matched[0]) {
+            this.view = path.matched[0].name
+          } else {
+            this.view = 'default'
+          }
+          this.sendView(this.view)
         }
       },
       500

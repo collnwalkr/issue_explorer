@@ -2,7 +2,7 @@
   <div id="app">
     <side-bar/>
     <div class="flex-stack">
-      <input-bar/>
+      <input-bar class="input-bar"/>
       <app-body/>
     </div>
   </div>
@@ -37,12 +37,23 @@ export default {
     margin: 0;
   }
 
+  a{
+    text-decoration: underline;
+    color: $link;
+    &:hover{
+      color: $link-hover;
+    }
+  }
+
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    height: 100%;
+    min-height: 100%;
+    padding-top: 40px;
+    margin: auto;
+    max-width: 1060px;
     display: -ms-flexbox;
     display: -webkit-box;
     display: -moz-box;
@@ -85,5 +96,9 @@ export default {
     &.tooltip-after-open {
       opacity: 1;
     }
+  }
+
+  .input-bar{
+    margin: 0 0 6rem 0;
   }
 </style>
