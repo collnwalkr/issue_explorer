@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <side-bar/>
+    <side-bar class="side-bar"/>
     <div class="flex-stack">
       <input-bar class="input-bar"/>
       <app-body/>
@@ -13,7 +13,7 @@ import inputBar from './components/InputBar'
 import appBody from './components/AppBody'
 import sideBar from './components/SideBar'
 
-require('font-awesome/css/font-awesome.css')
+require('reset-css/reset.css')
 require('babel-polyfill')
 
 export default {
@@ -37,6 +37,10 @@ export default {
     margin: 0;
   }
 
+  .octicon{
+    transform: translateY(2px);
+  }
+
   a{
     text-decoration: underline;
     color: $link;
@@ -51,9 +55,9 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     min-height: 100%;
-    padding-top: 40px;
+    padding-top: 80px;
     margin: auto;
-    max-width: 1060px;
+    max-width: 1300px;
     display: -ms-flexbox;
     display: -webkit-box;
     display: -moz-box;
@@ -75,18 +79,20 @@ export default {
   }
 
   .tooltip {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
     display: none;
     opacity: 0;
-    transition: opacity .15s;
+    transition: opacity .1s;
     pointer-events: none;
-    padding: 4px;
+    padding: 15px;
+    font-size: 0.95rem;
     z-index: 10000;
 
     .tooltip-content {
       background: $dark-grey;
       color: white;
-      border-radius: 16px;
-      padding: 5px 10px 4px;
+      border-radius: 6px;
+      padding: 10px 10px 10px;
     }
 
     &.tooltip-open-transitionend {
@@ -99,6 +105,23 @@ export default {
   }
 
   .input-bar{
-    margin: 0 0 6rem 0;
+    height: 150px;
+  }
+
+  .divider{
+    margin: 2em 0 1em 0;
+    position: relative;
+    .line {
+      position: absolute;
+      top: 50%;
+      border-top: 1px dashed $light-grey;
+      z-index: -1;
+      width: 100%;
+    }
+    span {
+      @include label();
+      padding: 0 5px 0 0;
+      background: #ffffff;
+    }
   }
 </style>

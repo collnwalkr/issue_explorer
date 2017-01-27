@@ -1,5 +1,5 @@
 // COLORS
-$off-white: #d7d7d7;
+$off-white: #eee;
 $light-grey: #c1c1c1;
 $mid-grey: #969696;
 $dark-grey: #4d4d4d;
@@ -7,4 +7,14 @@ $highlight: #f77d00;
 $link: #f77d00;
 $link-hover: #cb6600;
 
+
+// OTHER
 $transition-type: ease-out;
+
+
+// MIXINS
+@mixin label {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: $light-grey;
+}

@@ -116,7 +116,7 @@ export default{
   }
 
   .input-bar input{
-    width: 400px;
+    width: 500px;
     height: 30px;
     font-size: 1.5rem;
     padding: 10px;

@@ -1,12 +1,18 @@
 <template>
     <a :href=html v-tooltip.bottom-center=message target="_blank">
-      <i class="fa fa-fw fa-external-link-square"></i>
+      <octicon name="link"></octicon>
     </a>
 </template>
 
 <script>
+import Octicon from 'vue-octicon/components/Octicon.vue'
+import 'vue-octicon/icons/link'
+
 export default {
   name: 'external-link',
+  components: {
+    Octicon
+  },
   props: [
     'html',
     'message'
@@ -19,6 +25,9 @@ export default {
 
   a{
     color: $mid-grey;
+    :hover{
+      color: $link-hover;
+    }
   }
   img{
   }

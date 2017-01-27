@@ -6,7 +6,6 @@
     <p id="version">
       v {{ version }}
     </p>
-
     <li v-for="(radio, index) in radioButtons" class="radio" :class="{ disabled }">
       <input type="radio" :id=index :value="radio.value" v-model="filter" :disabled="disabled">
       <label :for=index>{{ radio.msg }} <span class="count" v-if="!disabled">{{ filterCount[index] }}</span></label>
@@ -15,18 +14,14 @@
   </div>
 </template>
 <script>
-import loadingBar from 'vue2-loading-bar'
 import { mapActions, mapGetters } from 'vuex'
 
 export default{
   name: 'side-bar',
-  components: {
-    loadingBar
-  },
   data () {
     return {
       appName: 'Issue Explorer',
-      version: '0.0.2',
+      version: '0.0.3',
       dd: '',
       filter: 'all',
       radioButtons: [
@@ -39,7 +34,7 @@ export default{
           value: 'week'
         },
         {
-          msg: 'All time',
+          msg: 'All Time',
           value: 'all'
         }
       ]
@@ -87,20 +82,22 @@ export default{
 <style scoped lang="scss">
   @import "../assets/variables.scss";
   .side-bar{
-    border-right: 1px solid $off-white;
+    border-right: 1px dashed $light-grey;
     text-align: left;
     -ms-flex: 0 100px;
     -webkit-box-flex:  0;
     -moz-box-flex:  0;
     -ms-box-flex:  0;
     flex:  0 1 200px;
-    padding: 20px;
+    padding: 160px 20px 20px 20px;
     background: white;
     z-index: 100;
   }
 
   h3{
     margin-bottom: 5px;
+    font-size: 1rem;
+    font-weight: bold;
   }
 
   #version{
@@ -197,22 +194,24 @@ export default{
   }
 
   li.disabled , li.disabled:hover {
+    cursor: default;
     color: $off-white;
     label, .check {
       color: $off-white;
+      cursor: default;
     }
     .check {
       border: 2px solid $off-white;
     }
     input[type=radio]:checked{
       ~ label {
-        color: $mid-grey;
+        color: $off-white;
       }
       ~ .check {
-        border: 2px solid $mid-grey;
+        border: 2px solid $off-white;
       }
       ~ .check::before{
-        background: $mid-grey;
+        background: $off-white;
       }
     }
   }
