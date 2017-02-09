@@ -1,8 +1,10 @@
 <template>
   <div class="side-bar">
-    <h3>
-      {{ appName }}
-    </h3>
+    <router-link :to="'/'">
+      <h3>
+        {{ appName }}
+      </h3>
+    </router-link>
     <p id="version">
       v {{ version }}
     </p>
@@ -92,6 +94,10 @@ export default{
     padding: 160px 20px 20px 20px;
     background: white;
     z-index: 100;
+  }
+
+  a{
+    color: $dark-grey;
   }
 
   h3{

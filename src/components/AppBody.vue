@@ -4,7 +4,17 @@
     <repo-view v-if="view === 'repo'"/>
     <error-view v-if="view === 'error'"/>
     <div v-if="view === 'default'">
-      Hello World
+      <h1> {{ header }} </h1>
+      <p>
+        {{ tag_line }}
+      </p>
+      <p>
+        Type in a link or check out the
+        <router-link :to="'/vuejs/vue'">
+          Vue.js
+        </router-link>
+        repo to get started.
+      </p>
     </div>
   </div>
 </template>
@@ -25,7 +35,9 @@ export default {
   },
   data () {
     return {
-      view: 'default'
+      view: 'default',
+      header: 'Issue Explorer',
+      tag_line: 'Explore users, repos, and open issues on Github.'
     }
   },
   computed: {
@@ -68,5 +80,14 @@ export default {
 </script>
 
 <style scoped>
+
+  h1{
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  p{
+    line-height: 1.5rem;
+  }
 
 </style>

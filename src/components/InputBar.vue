@@ -1,6 +1,6 @@
 <template>
   <div class="input-bar">
-    <input v-model="gh_link" :placeholder=ph type="url">
+    <input v-model="gh_link" :placeholder=ph type="url"  v-on:blur="stop_thinking">
 
     <div class="loading-bar-parent">
       <loading-bar
@@ -10,6 +10,7 @@
         :progress="load_progress"
         :direction="load_direction"
         :error="load_error"
+        :class="{ 'LoadingBar--thinking' : thinking}"
       />
     </div>
   </div>
@@ -40,9 +41,10 @@ export default{
     return {
       username: '',
       gh_link: '',
+      thinking: false,
       pathname: '',
       load_direction: 'right',
-      ph: 'link to GitHub repo or user'
+      ph: 'url for GitHub repo or user'
     }
   },
   computed: {
@@ -58,8 +60,12 @@ export default{
       'setError',
       'setProgress'
     ]),
+    stop_thinking: function () {
+      this.thinking = false
+    },
     submit: _.debounce(
       function () {
+        this.stop_thinking()
         this.setError(false)
         router.push({ path: this.pathname })
         this.getURL(this.gh_link)
@@ -69,6 +75,7 @@ export default{
     load_errorDone: function () {},
     load_progressDone: function () {
       this.setProgress(0)
+      this.stop_thinking()
     }
   },
   created: function () {
@@ -78,9 +85,11 @@ export default{
   },
   watch: {
     gh_link: function (rawUrl) {
+      this.thinking = true
       let url = Parse(rawUrl)
       this.pathname = url.pathname
       if (rawUrl) this.submit()
+      else this.stop_thinking()
     },
     '$route' (to) {
       if (to.path === '/') {
@@ -105,18 +114,33 @@ export default{
 
   .loading-bar-parent{
     height: 4px;
+    width: calc(100% - 8px);
   }
 
   .LoadingBar--error{
     background: #ff493e;
   }
 
+  .LoadingBar--thinking {
+    background: $light-grey;
+    transition: background 300ms ease-out;
+  }
+
+  .LoadingBar-glow {
+    box-shadow: none;
+  }
+
   #loading-bar{
     position: relative;
   }
 
+  .input-bar {
+    text-align: left;
+    padding-left: 40px;
+  }
+
   .input-bar input{
-    width: 500px;
+    width: calc(100% - 30px);
     height: 30px;
     font-size: 1.5rem;
     padding: 10px;

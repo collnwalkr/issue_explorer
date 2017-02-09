@@ -56,6 +56,7 @@ export default {
     text-align: center;
     min-height: 100%;
     padding-top: 80px;
+    padding-bottom: 80px;
     margin: auto;
     max-width: 1300px;
     display: -ms-flexbox;
